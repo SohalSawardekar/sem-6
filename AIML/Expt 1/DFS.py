@@ -16,46 +16,50 @@ class Graph:
         self.graph[node1].append(node2)
         self.graph[node2].append(node1)  
 
-    def dfs_recursive(self, node, visited, order):
-        if node not in visited:
-            visited.add(node)
-            order.append(node)
-            for neighbor in self.graph[node]:
-                self.dfs_recursive(neighbor, visited, order)
+    def retrace_path(self, parent, goal_node):
+        path = []
+        current_node = goal_node
+        while current_node is not None:
+            path.append(current_node)
+            current_node = parent.get(current_node, None)
+        path.reverse() 
+        return path
 
-    def dfs(self, start):
-        """
-        Iterative DFS implementation.
-        """
+    def dfs(self, start, goal_node):
         if start not in self.graph:
-            return []  # Return empty if the start node is not in the graph
+            return [], []  
 
-        visited = set()         # Set to keep track of visited nodes
-        stack = [start]         # Stack to maintain the order of exploration
-        order = []              # List to store the DFS traversal order
+        visited = set()
+        queue = deque([start])
+        order = []
+        parent = {start: None}  
 
-        while stack:
-            node = stack.pop()
+        while queue:
+            node = queue.pop()
+
             if node not in visited:
                 visited.add(node)
                 order.append(node)
-                # Add unvisited neighbors to the stack
-                for neighbor in reversed(self.graph[node]):
-                    if neighbor not in visited:
-                        stack.append(neighbor)
+                for neighbor in self.graph[node]:
+                    if neighbor not in visited and neighbor not in queue:
+                        queue.append(neighbor)
+                        parent[neighbor] = node
 
-        return order
+        if goal_node in parent:
+            path = self.retrace_path(parent, goal_node)
+        else:
+            path = []  
+
+        return order, path
 
 
-# Main Program
 if __name__ == "__main__":
     g = Graph()
 
-    # Take user input for the graph
-    print("Enter edges (format: node1 node2). Type 'done' when finished:")
+    print("Enter edges (format: node1 node2). Type -1 when finished:")
     while True:
         edge = input("Edge: ")
-        if edge.lower() == "done":
+        if edge == "-1":
             break
         try:
             node1, node2 = edge.split()
@@ -63,20 +67,15 @@ if __name__ == "__main__":
         except ValueError:
             print("Invalid format! Enter the edge as 'node1 node2'.")
 
-    start_node = input("Enter the starting node for DFS: ")
+    start_node = input("Enter the starting node: ")
+    goal_node = input("Enter the goal node: ")
 
-    # Perform DFS (iterative)
-    dfs_result = g.dfs(start_node)
+    dfs_result, final_path = g.dfs(start_node, goal_node)
     if dfs_result:
-        print(f"DFS (Iterative) starting from node {start_node}: {dfs_result}")
-    else:
-        print(f"Node {start_node} is not in the graph.")
-
-    # Perform DFS (recursive)
-    visited = set()
-    order = []
-    g.dfs_recursive(start_node, visited, order)
-    if order:
-        print(f"DFS (Recursive) starting from node {start_node}: {order}")
+        print(f"DFS Traversal from node {start_node}: {dfs_result}")
+        if final_path:
+            print(f"Path from node {start_node} to {goal_node}: {final_path}")
+        else:
+            print(f"No path found from node {start_node} to {goal_node}.")
     else:
         print(f"Node {start_node} is not in the graph.")
