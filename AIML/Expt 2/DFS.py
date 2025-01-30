@@ -22,7 +22,7 @@ class Graph:
         while current_node is not None:
             path.append(current_node)
             current_node = parent.get(current_node, None)
-        path.reverse() 
+        path.reverse()  
         return path
 
     def dfs(self, start, goal_node):
@@ -30,28 +30,26 @@ class Graph:
             return [], []  
 
         visited = set()
-        queue = deque([start])
+        stack = [start]  
         order = []
         parent = {start: None}  
-
-        while queue:
-            node = queue.pop()
+        final_path = []
+        while stack:
+            node = stack.pop()  
 
             if node not in visited:
                 visited.add(node)
                 order.append(node)
-                for neighbor in self.graph[node]:
-                    if neighbor not in visited and neighbor not in queue:
-                        queue.append(neighbor)
-                        parent[neighbor] = node
 
-        if goal_node in parent:
-            path = self.retrace_path(parent, goal_node)
-        else:
-            path = []  
+                if node == goal_node:
+                    final_path = self.retrace_path(parent, goal_node) 
 
-        return order, path
+                for neighbor in reversed(self.graph[node]):  
+                    if neighbor not in visited:
+                        stack.append(neighbor)
+                        parent[neighbor] = node  
 
+        return order, final_path
 
 if __name__ == "__main__":
     g = Graph()
@@ -71,6 +69,7 @@ if __name__ == "__main__":
     goal_node = input("Enter the goal node: ")
 
     dfs_result, final_path = g.dfs(start_node, goal_node)
+
     if dfs_result:
         print(f"DFS Traversal from node {start_node}: {dfs_result}")
         if final_path:

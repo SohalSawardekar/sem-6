@@ -1,6 +1,6 @@
-from collections import deque
-from math import gcd
+# Water Jug Problem Using DFS
 
+from collections import deque
 
 class WaterJug:
     def __init__(self):
@@ -20,48 +20,43 @@ class WaterJug:
     def solutions(self):
         x, y, target = self.jug1, self.jug2, self.target
         
-        isSolution = False
+        isSolutionPresent = False
         solutions = deque()
+        stack = []  
         visited = set()
-        queue = deque()
-        states = deque()
-        queue.append((0, 0, [])) 
-        states.append((0, 0)) 
+        stack.append((0, 0, []))  
 
-        while queue:
-            a, b, path = queue.popleft()
+        while stack:
+            a, b, path = stack.pop()  
 
             if a == target or b == target:
                 path.append((a, b))
                 solutions.append(path)
-                isSolution = True
+                isSolutionPresent = True
                 continue
-                
 
             if (a, b) in visited:
                 continue
             visited.add((a, b))
-
             path.append((a, b))
 
             moves = [
-                (x, b),  
-                (a, y),  
-                (0, b),  
-                (a, 0),  
-                (min(a + b, x), max(0, a + b - x)),  
-                (max(0, a + b - y), min(a + b, y))   
+                (x, b),                                 # Filling jug 1
+                (a, y),                                 # Filling jug 2
+                (0, b),                                 # Empty jug 1
+                (a, 0),                                 # Empty jug 2
+                (min(a + b, x), max(0, a + b - x)),     # Transfer from jug 2 to jug 1
+                (max(0, a + b - y), min(a + b, y))      # Transfer from jug 1 to jug 2
             ]
 
             for move in moves:
                 if move not in visited:
-                    queue.append((move[0], move[1], path.copy()))
-                    states.append((move[0], move[1]))
-            
-        if(isSolution == False):
-            print("...No Solution Present...")
-            exit()
-        
+                    stack.append((move[0], move[1], path.copy()))
+
+        if not isSolutionPresent:
+            print("\n...No Solution Present...\n")
+            return []
+
         return solutions
 
 if __name__ == "__main__":
@@ -70,11 +65,12 @@ if __name__ == "__main__":
     results = problem.solutions()
 
     i = 1
-    print("\n")
-    for result in results:
-        print(f'Solution {i}: ')
-        i += 1
-        for set in result:
-            print(set)
-        print("\n")
-    print("\n")
+    if results:
+        for result in results:
+            print(f'Solution {i}:')
+            i += 1
+            for step in result:
+                print(step)
+            print("\n")
+    else:
+        print("\nNo solution found.")
