@@ -78,3 +78,22 @@ if __name__ == "__main__":
             print(f"No path found from node {start_node} to {goal_node}.")
     else:
         print(f"Node {start_node} is not in the graph.")
+
+
+
+# Output: 
+
+# Enter edges (format: node1 node2). Type -1 when finished:
+# Edge: A B
+# Edge: A C
+# Edge: B D
+# Edge: B E
+# Edge: C F
+# Edge: F E
+# Edge: -1
+
+# Enter the starting node: A
+# Enter the goal node: D
+
+# DFS Traversal from node A: ['A', 'B', 'D', 'E', 'F', 'C']
+# Path from node A to D: ['A', 'B', 'D']

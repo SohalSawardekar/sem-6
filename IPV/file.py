@@ -3,6 +3,7 @@ import cv2
 # Load the image
 image_path = 'C:/Users/sohal/OneDrive/Pictures/Screenshots/Screenshot 2025-01-04 225820.png'
 image = cv2.imread(image_path)
+print(image)
 
 # Apply grayscale filter
 grayscale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

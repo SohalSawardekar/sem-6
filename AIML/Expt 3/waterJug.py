@@ -74,3 +74,32 @@ if __name__ == "__main__":
             print("\n")
     else:
         print("\nNo solution found.")
+
+
+# Output: 
+
+# Enter the size of Jug 1: 4
+# Enter the size of Jug 2: 3
+# Enter the target amount: 2
+
+# Solution 1:
+# (0, 0)
+# (0, 3)
+# (3, 0)
+# (3, 3)
+# (4, 2)
+
+
+# Solution 2:
+# (0, 0)
+# (0, 3)
+# (3, 0)
+# (3, 3)
+# (4, 3)
+# (4, 0)
+# (1, 3)
+# (1, 0)
+# (0, 1)
+# (4, 1)
+# (2, 3)
+
